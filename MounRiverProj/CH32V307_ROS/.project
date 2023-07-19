@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>CH32V307_ROS</name>
-	<comment/>
+	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -30,11 +30,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/SRC/Core</locationURI>
 		</link>
 		<link>
-			<name>Debug</name>
-			<type>2</type>
-			<locationURI>PROJECT_LOC/SRC/Debug</locationURI>
-		</link>
-		<link>
 			<name>Peripheral</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/SRC/Peripheral</locationURI>
@@ -43,7 +38,7 @@
 	<filteredResources>
 		<filter>
 			<id>1595986042669</id>
-			<name/>
+			<name></name>
 			<type>22</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
