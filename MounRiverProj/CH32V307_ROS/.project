@@ -23,18 +23,6 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Core</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/SRC/Core</locationURI>
-		</link>
-		<link>
-			<name>Peripheral</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/SRC/Peripheral</locationURI>
-		</link>
-	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1595986042669</id>
