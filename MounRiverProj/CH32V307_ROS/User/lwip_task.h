@@ -24,9 +24,10 @@
 #ifndef _LWIP_TASK_H_
 #define _LWIP_TASK_H_
 
-#include "tiny-macro-os.h"
+#include "FreeRTOS.h"
 #include "debug.h"
-#include "main.h"
+#include "ch32v30x_eth.h"
+//#include "main.h"
 #include "string.h"
 #include <lwip/opt.h>
 #include <lwip/arch.h>
@@ -40,7 +41,7 @@
 #include "lwip/timeouts.h"
 #include "ch32v30x_rng.h"
 #include "list.h"
-#include "memb.h"
+//#include "memb.h"
 
 #define ETH_RXBUFNB        4
 #define ETH_TXBUFNB        4
@@ -65,8 +66,8 @@ extern ETH_DMADESCTypeDef  *DMARxDescToGet;
 extern ETH_DMADESCTypeDef DMARxDscrTab[ETH_RXBUFNB];/* 鎺ユ敹鎻忚堪绗﹁〃 */
 extern ETH_DMADESCTypeDef DMATxDscrTab[ETH_TXBUFNB];/* 鍙戦�佹弿杩扮琛� */
 
-LIST_EXTERN(ch307_mac_rec);
-MEMB_EXTERN(ch307_mac_rec_frame_mem);
+//!!LIST_EXTERN(ch307_mac_rec);
+//!!MEMB_EXTERN(ch307_mac_rec_frame_mem);
 
 extern uint32_t ETH_TxPkt_ChainMode(u16 FrameLength);
 void mac_send(uint8_t * content_ptr, uint16_t content_len);
@@ -81,8 +82,8 @@ extern volatile uint8_t net_data_led_require; /*闇�瑕佷寒鐏渶姹�*/
 #define NET_LED_PERIOD_MSECS 100
 extern void net_led_tmr(void);
 
-extern OS_TASK(os_lwip, void);
+//!!extern OS_TASK(os_lwip, void);
 
-extern OS_TASK(os_lwip_timeouts, void);
+//!!extern OS_TASK(os_lwip_timeouts, void);
 
 #endif /* _LWIP_TASK_H_ */

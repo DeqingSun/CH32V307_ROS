@@ -103,7 +103,7 @@ low_level_input(struct netif *netif)
     /* Obtain the size of the packet and put it into the "len"
        variable. */
     NVIC_DisableIRQ(ETH_IRQn);
-    rec_data = list_pop(ch307_mac_rec);
+    //!!rec_data = list_pop(ch307_mac_rec);
     NVIC_EnableIRQ(ETH_IRQn);
     if (rec_data == NULL)
     {
@@ -169,7 +169,7 @@ low_level_input(struct netif *netif)
     NVIC_DisableIRQ(ETH_IRQn);
     //DMARxDescToGet->Status |= ETH_DMARxDesc_OWN;
     rec_data->descriptor->Status |= ETH_DMARxDesc_OWN;
-    memb_free(&ch307_mac_rec_frame_mem, rec_data);
+    //!!memb_free(&ch307_mac_rec_frame_mem, rec_data);
     NVIC_EnableIRQ(ETH_IRQn);
 
     return p;
