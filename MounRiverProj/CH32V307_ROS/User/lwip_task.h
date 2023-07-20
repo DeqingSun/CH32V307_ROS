@@ -45,6 +45,7 @@
 //#include "memb.h"
 
 #define USE10BASE_T        1
+#define PHY_ADDRESS     0x01
 
 #define ETH_RXBUFNB        4
 #define ETH_TXBUFNB        4

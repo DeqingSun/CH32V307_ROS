@@ -97,10 +97,11 @@ void task2_task(void *pvParameters)
 void task_lwip_task(void *pvParameters)
 {
     // mem_init of lwip, init outside the lwip_init for user to using outside. */
-    //mem_init();
+    mem_init();
 
     //init phy
     ch307_init_phy();
+    printf("CH307_INIT_PHY ok\n");
 
     while(1)
     {

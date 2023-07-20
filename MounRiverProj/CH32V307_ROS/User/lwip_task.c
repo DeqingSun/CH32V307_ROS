@@ -230,179 +230,172 @@ void ch307_init_phy()
     tmpreg &= MACMIIAR_CR_MASK;
     tmpreg |= (uint32_t)ETH_MACMIIAR_CR_Div42;
     ETH->MACMIIAR = (uint32_t)tmpreg;
-//
-//    /* 澶嶄綅鐗╃悊灞� */
-//    ETH_WritePHYRegister(PHY_ADDRESS, PHY_BCR, PHY_Reset);/* 澶嶄綅鐗╃悊灞�  */
-//
-//    OS_SUBNT_WAITX(OS_SEC_TICKS / 10);/* 澶嶄綅寤惰繜  */
-//
-//    timeout=10000;/* 鏈�澶ц秴鏃跺崄绉�   */
-//    RegValue = 0;
-//
-//    OS_SUBNT_SET_STATE();
-//
-//    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BCR);
-//    if((RegValue & (PHY_Reset)))
-//    {
-//        timeout--;
-//        if(timeout<=0)
-//        {
-//          printf("Error:Wait phy software timeout!\nPlease cheak PHY/MID.\nProgram has been blocked!\n");
-//          while(1);
-//        }
-//        OS_SUBNT_CWAITX(OS_SEC_TICKS / 1000);
-//    }
-//
-//    /* 绛夊緟鐗╃悊灞備笌瀵圭寤虹珛LINK */
-//    timeout=10000;/* 鏈�澶ц秴鏃跺崄绉�   */
-//    RegValue = 0;
-//
-//    OS_SUBNT_SET_STATE();
-//
-//    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BSR);
-//    if((RegValue & (PHY_Linked_Status)) == 0)
-//    {
-//        timeout--;
-//        if(timeout<=0)
-//        {
-//          printf("Error:Wait phy linking timeout!\nPlease cheak MID.\nProgram has been blocked!\n");
-//          while(1);
-//        }
-//        OS_SUBNT_CWAITX(OS_SEC_TICKS / 1000);
-//    }
-//
-//    /* 绛夊緟鐗╃悊灞傚畬鎴愯嚜鍔ㄥ崗鍟� */
-//    timeout=10000;/* 鏈�澶ц秴鏃跺崄绉�   */
-//    RegValue = 0;
-//
-//    OS_SUBNT_SET_STATE();
-//
-//    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BSR);
-//    if( (RegValue & PHY_AutoNego_Complete) == 0 )
-//    {
-//        timeout--;
-//        if(timeout<=0)
-//        {
-//          printf("Error:Wait phy auto-negotiation complete timeout!\nPlease cheak MID.\nProgram has been blocked!\n");
-//          while(1);
-//        }
-//        OS_SUBNT_CWAITX(OS_SEC_TICKS / 1000);
-//    }
-//
-//    RegValue = ETH_ReadPHYRegister( PHY_ADDRESS, 0x10 );
-//    printf("PHY_SR value:%04x.\n", RegValue);
-//
-//    if( RegValue & (1<<2) )
-//    {
-//        ETH_InitStructure->ETH_Mode = ETH_Mode_FullDuplex;
-//      printf("Full Duplex.\n");
-//    }
-//    else
-//    {
-//        ETH_InitStructure->ETH_Mode = ETH_Mode_HalfDuplex;
-//      printf("Half Duplex.\n");
-//    }
-//    ETH_InitStructure->ETH_Speed = ETH_Speed_10M;
-//    if(RegValue & (1<<3))
-//    {
-//      printf("Loopback_10M \n");
-//    }
-//    else
-//    {
-//    }
-//
-//    OS_SUBNT_WAITX(OS_SEC_TICKS / 10);
-//
-//    /* 鐐逛寒link鐘舵�乴ed鐏� */
-//    Ethernet_LED_LINKSET(0);
-//
-//    /*------------------------ MAC瀵勫瓨鍣ㄩ厤缃�  ----------------------- --------------------*/
-//    /* MACCCR鍦≧GMII鎺ュ彛妯″紡涓嬪叿鏈夎皟鏁碦GMII鎺ュ彛鏃跺簭鐨勫煙锛岃娉ㄦ剰 */
-//    tmpreg = ETH->MACCR;
-//    tmpreg &= MACCR_CLEAR_MASK;
-//    tmpreg |= (uint32_t)(ETH_InitStructure->ETH_Watchdog |
-//                    ETH_InitStructure->ETH_Jabber |
-//                    ETH_InitStructure->ETH_InterFrameGap |
-//                    ETH_InitStructure->ETH_CarrierSense |
-//                    ETH_InitStructure->ETH_Speed |
-//                    ETH_InitStructure->ETH_ReceiveOwn |
-//                    ETH_InitStructure->ETH_LoopbackMode |
-//                    ETH_InitStructure->ETH_Mode |
-//                    ETH_InitStructure->ETH_ChecksumOffload |
-//                    ETH_InitStructure->ETH_RetryTransmission |
-//                    ETH_InitStructure->ETH_AutomaticPadCRCStrip |
-//                    ETH_InitStructure->ETH_BackOffLimit |
-//                    ETH_InitStructure->ETH_DeferralCheck);
-//    /* 鍐橫AC鎺у埗瀵勫瓨鍣� */
-//    ETH->MACCR = (uint32_t)tmpreg;
-//  #ifdef USE10BASE_T
-//    ETH->MACCR|=ETH_Internal_Pull_Up_Res_Enable;/* 鍚敤鍐呴儴涓婃媺  */
-//  #endif
-//    ETH->MACFFR = (uint32_t)(ETH_InitStructure->ETH_ReceiveAll |
-//                            ETH_InitStructure->ETH_SourceAddrFilter |
-//                            ETH_InitStructure->ETH_PassControlFrames |
-//                            ETH_InitStructure->ETH_BroadcastFramesReception |
-//                            ETH_InitStructure->ETH_DestinationAddrFilter |
-//                            ETH_InitStructure->ETH_PromiscuousMode |
-//                            ETH_InitStructure->ETH_MulticastFramesFilter |
-//                            ETH_InitStructure->ETH_UnicastFramesFilter);
-//    /*--------------- ETHERNET MACHTHR and MACHTLR Configuration ---------------*/
-//    /* Write to ETHERNET MACHTHR */
-//    ETH->MACHTHR = (uint32_t)ETH_InitStructure->ETH_HashTableHigh;
-//    /* Write to ETHERNET MACHTLR */
-//    ETH->MACHTLR = (uint32_t)ETH_InitStructure->ETH_HashTableLow;
-//    /*----------------------- ETHERNET MACFCR Configuration --------------------*/
-//    /* Get the ETHERNET MACFCR value */
-//    tmpreg = ETH->MACFCR;
-//    /* Clear xx bits */
-//    tmpreg &= MACFCR_CLEAR_MASK;
-//
-//    tmpreg |= (uint32_t)((ETH_InitStructure->ETH_PauseTime << 16) |
-//                     ETH_InitStructure->ETH_ZeroQuantaPause |
-//                     ETH_InitStructure->ETH_PauseLowThreshold |
-//                     ETH_InitStructure->ETH_UnicastPauseFrameDetect |
-//                     ETH_InitStructure->ETH_ReceiveFlowControl |
-//                     ETH_InitStructure->ETH_TransmitFlowControl);
-//    ETH->MACFCR = (uint32_t)tmpreg;
-//
-//    ETH->MACVLANTR = (uint32_t)(ETH_InitStructure->ETH_VLANTagComparison |
-//                               ETH_InitStructure->ETH_VLANTagIdentifier);
-//
-//    tmpreg = ETH->DMAOMR;
-//    /* Clear xx bits */
-//    tmpreg &= DMAOMR_CLEAR_MASK;
-//
-//    tmpreg |= (uint32_t)(ETH_InitStructure->ETH_DropTCPIPChecksumErrorFrame |
-//                    ETH_InitStructure->ETH_ReceiveStoreForward |
-//                    ETH_InitStructure->ETH_FlushReceivedFrame |
-//                    ETH_InitStructure->ETH_TransmitStoreForward |
-//                    ETH_InitStructure->ETH_TransmitThresholdControl |
-//                    ETH_InitStructure->ETH_ForwardErrorFrames |
-//                    ETH_InitStructure->ETH_ForwardUndersizedGoodFrames |
-//                    ETH_InitStructure->ETH_ReceiveThresholdControl |
-//                    ETH_InitStructure->ETH_SecondFrameOperate);
-//    ETH->DMAOMR = (uint32_t)tmpreg;
-//
-//    ETH->DMABMR = (uint32_t)(ETH_InitStructure->ETH_AddressAlignedBeats |
-//                            ETH_InitStructure->ETH_FixedBurst |
-//                            ETH_InitStructure->ETH_RxDMABurstLength | /* !! if 4xPBL is selected for Tx or Rx it is applied for the other */
-//                            ETH_InitStructure->ETH_TxDMABurstLength |
-//                           (ETH_InitStructure->ETH_DescriptorSkipLength << 2) |
-//                            ETH_InitStructure->ETH_DMAArbitration |
-//                            ETH_DMABMR_USP);
-//    mem_free(ETH_InitStructure);
-//    /* Enable the Ethernet Rx Interrupt */
-//    ETH_DMAITConfig(ETH_DMA_IT_NIS
-//                  | ETH_DMA_IT_R
-//                  | ETH_DMA_IT_T
-//                  ,ENABLE);
-//
-//    NVIC_EnableIRQ(ETH_IRQn);
-//    ETH_DMATxDescChainInit(DMATxDscrTab, &Tx_Buff[0][0], ETH_TXBUFNB);
-//    ETH_DMARxDescChainInit(DMARxDscrTab, &Rx_Buff[0][0], ETH_RXBUFNB);
-//    ETH_Start();
-//
-//    OS_SUBNT_END();
+
+    //reset phy
+    ETH_WritePHYRegister(PHY_ADDRESS, PHY_BCR, PHY_Reset);//reset phy
+
+    vTaskDelay(100); // delay of rest
+
+    timeout=10000;//max timeout 10S
+    RegValue = 0;
+
+    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BCR);
+    if((RegValue & (PHY_Reset)))
+    {
+        timeout--;
+        if(timeout<=0)
+        {
+          printf("Error:Wait phy software timeout!\nPlease cheak PHY/MID.\nProgram has been blocked!\n");
+          while(1);
+        }
+        vTaskDelay(1);
+    }
+
+    // wait till phy establish link with other side
+    timeout=10000;//max timeout 10S
+    RegValue = 0;
+
+    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BSR);
+    if((RegValue & (PHY_Linked_Status)) == 0)
+    {
+        timeout--;
+        if(timeout<=0)
+        {
+          printf("Error:Wait phy linking timeout!\nPlease cheak MID.\nProgram has been blocked!\n");
+          while(1);
+        }
+        vTaskDelay(1);
+    }
+
+    // wait till phy to negotiate automatically
+    timeout=10000;//max timeout 10S
+    RegValue = 0;
+
+    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BSR);
+    if( (RegValue & PHY_AutoNego_Complete) == 0 )
+    {
+        timeout--;
+        if(timeout<=0)
+        {
+          printf("Error:Wait phy auto-negotiation complete timeout!\nPlease cheak MID.\nProgram has been blocked!\n");
+          while(1);
+        }
+        vTaskDelay(1);
+    }
+
+    RegValue = ETH_ReadPHYRegister( PHY_ADDRESS, 0x10 );
+    printf("PHY_SR value:%04x.\n", RegValue);
+
+    if( RegValue & (1<<2) )
+    {
+        ETH_InitStructure.ETH_Mode = ETH_Mode_FullDuplex;
+      printf("Full Duplex.\n");
+    }
+    else
+    {
+        ETH_InitStructure.ETH_Mode = ETH_Mode_HalfDuplex;
+      printf("Half Duplex.\n");
+    }
+    ETH_InitStructure.ETH_Speed = ETH_Speed_10M;
+    if(RegValue & (1<<3))
+    {
+      printf("Loopback_10M \n");
+    }
+    else
+    {
+    }
+
+    vTaskDelay(100);
+
+    //turn on Link LED
+    Ethernet_LED_LINKSET(0);
+
+    //------------------------ MAC reg config ----------------------- --------------------
+    // MACCCR in RGMII mode has the part to adjust RGMII timing, please note
+    tmpreg = ETH->MACCR;
+    tmpreg &= MACCR_CLEAR_MASK;
+    tmpreg |= (uint32_t)(ETH_InitStructure.ETH_Watchdog |
+                    ETH_InitStructure.ETH_Jabber |
+                    ETH_InitStructure.ETH_InterFrameGap |
+                    ETH_InitStructure.ETH_CarrierSense |
+                    ETH_InitStructure.ETH_Speed |
+                    ETH_InitStructure.ETH_ReceiveOwn |
+                    ETH_InitStructure.ETH_LoopbackMode |
+                    ETH_InitStructure.ETH_Mode |
+                    ETH_InitStructure.ETH_ChecksumOffload |
+                    ETH_InitStructure.ETH_RetryTransmission |
+                    ETH_InitStructure.ETH_AutomaticPadCRCStrip |
+                    ETH_InitStructure.ETH_BackOffLimit |
+                    ETH_InitStructure.ETH_DeferralCheck);
+    // write MAC control reg
+    ETH->MACCR = (uint32_t)tmpreg;
+  #ifdef USE10BASE_T
+    ETH->MACCR|=ETH_Internal_Pull_Up_Res_Enable;/* 鍚敤鍐呴儴涓婃媺  */
+  #endif
+    ETH->MACFFR = (uint32_t)(ETH_InitStructure.ETH_ReceiveAll |
+                            ETH_InitStructure.ETH_SourceAddrFilter |
+                            ETH_InitStructure.ETH_PassControlFrames |
+                            ETH_InitStructure.ETH_BroadcastFramesReception |
+                            ETH_InitStructure.ETH_DestinationAddrFilter |
+                            ETH_InitStructure.ETH_PromiscuousMode |
+                            ETH_InitStructure.ETH_MulticastFramesFilter |
+                            ETH_InitStructure.ETH_UnicastFramesFilter);
+    //--------------- ETHERNET MACHTHR and MACHTLR Configuration ---------------
+    // Write to ETHERNET MACHTHR
+    ETH->MACHTHR = (uint32_t)ETH_InitStructure.ETH_HashTableHigh;
+    // Write to ETHERNET MACHTLR
+    ETH->MACHTLR = (uint32_t)ETH_InitStructure.ETH_HashTableLow;
+    //----------------------- ETHERNET MACFCR Configuration --------------------
+    // Get the ETHERNET MACFCR value
+    tmpreg = ETH->MACFCR;
+    // Clear xx bits
+    tmpreg &= MACFCR_CLEAR_MASK;
+
+    tmpreg |= (uint32_t)((ETH_InitStructure.ETH_PauseTime << 16) |
+                     ETH_InitStructure.ETH_ZeroQuantaPause |
+                     ETH_InitStructure.ETH_PauseLowThreshold |
+                     ETH_InitStructure.ETH_UnicastPauseFrameDetect |
+                     ETH_InitStructure.ETH_ReceiveFlowControl |
+                     ETH_InitStructure.ETH_TransmitFlowControl);
+    ETH->MACFCR = (uint32_t)tmpreg;
+
+    ETH->MACVLANTR = (uint32_t)(ETH_InitStructure.ETH_VLANTagComparison |
+                               ETH_InitStructure.ETH_VLANTagIdentifier);
+
+    tmpreg = ETH->DMAOMR;
+    // Clear xx bits
+    tmpreg &= DMAOMR_CLEAR_MASK;
+
+    tmpreg |= (uint32_t)(ETH_InitStructure.ETH_DropTCPIPChecksumErrorFrame |
+                    ETH_InitStructure.ETH_ReceiveStoreForward |
+                    ETH_InitStructure.ETH_FlushReceivedFrame |
+                    ETH_InitStructure.ETH_TransmitStoreForward |
+                    ETH_InitStructure.ETH_TransmitThresholdControl |
+                    ETH_InitStructure.ETH_ForwardErrorFrames |
+                    ETH_InitStructure.ETH_ForwardUndersizedGoodFrames |
+                    ETH_InitStructure.ETH_ReceiveThresholdControl |
+                    ETH_InitStructure.ETH_SecondFrameOperate);
+    ETH->DMAOMR = (uint32_t)tmpreg;
+
+    ETH->DMABMR = (uint32_t)(ETH_InitStructure.ETH_AddressAlignedBeats |
+                            ETH_InitStructure.ETH_FixedBurst |
+                            ETH_InitStructure.ETH_RxDMABurstLength | // !! if 4xPBL is selected for Tx or Rx it is applied for the other
+                            ETH_InitStructure.ETH_TxDMABurstLength |
+                           (ETH_InitStructure.ETH_DescriptorSkipLength << 2) |
+                            ETH_InitStructure.ETH_DMAArbitration |
+                            ETH_DMABMR_USP);
+
+    // Enable the Ethernet Rx Interrupt
+    ETH_DMAITConfig(ETH_DMA_IT_NIS
+                  | ETH_DMA_IT_R
+                  | ETH_DMA_IT_T
+                  ,ENABLE);
+
+    NVIC_EnableIRQ(ETH_IRQn);
+    ETH_DMATxDescChainInit(DMATxDscrTab, &Tx_Buff[0][0], ETH_TXBUFNB);
+    ETH_DMARxDescChainInit(DMARxDscrTab, &Rx_Buff[0][0], ETH_RXBUFNB);
+    ETH_Start();
+
 }
 
 
