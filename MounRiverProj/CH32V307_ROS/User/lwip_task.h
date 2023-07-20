@@ -44,6 +44,8 @@
 #include "list.h"
 //#include "memb.h"
 
+#define USE10BASE_T        1
+
 #define ETH_RXBUFNB        4
 #define ETH_TXBUFNB        4
 

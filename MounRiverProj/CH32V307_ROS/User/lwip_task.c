@@ -137,101 +137,99 @@ void ch307_init_phy()
     GPIO_Init(GPIOC,&GPIO);
     Ethernet_LED_LINKSET(1);// turn off link led.
     Ethernet_LED_DATASET(1);// turn off data led.
-//
-//    // Ethernet_Configuration
-//    // MUST use static in OS_TASK
-//    static ETH_InitTypeDef *ETH_InitStructure;
-//    static uint32_t timeout;
-//
-//    ETH_InitStructure = mem_malloc(sizeof(ETH_InitTypeDef));
-//    memset(ETH_InitStructure, 0, sizeof(ETH_InitTypeDef));
-//    // Enable Ethernet MAC clock
-//    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC|RCC_AHBPeriph_ETH_MAC_Tx|RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
 
-//#ifdef USE10BASE_T
-//    /* Enable internal 10BASE-T PHY*/
-//    EXTEN->EXTEN_CTR |=EXTEN_ETH_10M_EN;/* 浣胯兘10M浠ュお缃戠墿鐞嗗眰   */
-//#endif
-//
-//#ifdef USE_GIGA_MAC
-//    /* Enable 1G MAC*/
-//    EXTEN->EXTEN_CTR |= EXTEN_ETH_RGMII_SEL;/* 浣胯兘1G浠ュお缃慚AC */
-//    RCC_ETH1GCLKConfig(RCC_ETH1GCLKSource_PB1_IN);/* 閫夋嫨澶栭儴125MHz杈撳叆 */
-//    RCC_ETH1G_125Mcmd(ENABLE);/* 浣胯兘125MHz鏃堕挓 */
-//
-//    /*  Enable RGMII GPIO */
-//    GETH_pin_init();
-//#endif
-//
-//#ifdef USE_FAST_MAC
-//    /*  Enable MII or RMII GPIO */
-//    FETH_pin_init();
-//#endif
-//
-//    /* Reset ETHERNET on AHB Bus */
-//    ETH_DeInit();
-//
-//    /* Software reset */
-//    ETH_SoftwareReset();
-//
-//    /* Wait for software reset */
-//    timeout=10;
-//    OS_SUBNT_SET_STATE();
-//    if(ETH->DMABMR & ETH_DMABMR_SR)
-//    {
-//        timeout--;
-//        if(timeout==0)
-//        {
-//            printf("Error:Eth soft-reset timeout!\nPlease check RGMII TX & RX clock line.\n");
-//        }
-//        OS_SUBNT_CWAITX(OS_SEC_TICKS / 100);
-//    }
-//
-//    /* ETHERNET Configuration ------------------------------------------------------*/
-//    /* Call ETH_StructInit if you don't like to configure all ETH_InitStructure parameter */
-//    ETH_StructInit(ETH_InitStructure);
-//    /* Fill ETH_InitStructure parametrs */
-//    /*------------------------   MAC   -----------------------------------*/
-//    ETH_InitStructure->ETH_Mode = ETH_Mode_FullDuplex;
-//    ETH_InitStructure->ETH_Speed = ETH_Speed_1000M;
-//    ETH_InitStructure->ETH_AutoNegotiation = ETH_AutoNegotiation_Enable  ;
-//    ETH_InitStructure->ETH_LoopbackMode = ETH_LoopbackMode_Disable;
-//    ETH_InitStructure->ETH_RetryTransmission = ETH_RetryTransmission_Disable;
-//    ETH_InitStructure->ETH_AutomaticPadCRCStrip = ETH_AutomaticPadCRCStrip_Disable;
-//    ETH_InitStructure->ETH_ReceiveAll = ETH_ReceiveAll_Enable;
-//    ETH_InitStructure->ETH_BroadcastFramesReception = ETH_BroadcastFramesReception_Enable;
-//    ETH_InitStructure->ETH_PromiscuousMode = ETH_PromiscuousMode_Enable;
-//    ETH_InitStructure->ETH_MulticastFramesFilter = ETH_MulticastFramesFilter_Perfect;
-//    ETH_InitStructure->ETH_UnicastFramesFilter = ETH_UnicastFramesFilter_Perfect;
-//#ifdef CHECKSUM_BY_HARDWARE
-//    ETH_InitStructure->ETH_ChecksumOffload = ETH_ChecksumOffload_Enable;
-//#endif
-//    /*------------------------   DMA   -----------------------------------*/
-//    /* When we use the Checksum offload feature, we need to enable the Store and Forward mode:
-//    the store and forward guarantee that a whole frame is stored in the FIFO, so the MAC can insert/verify the checksum,
-//    if the checksum is OK the DMA can handle the frame otherwise the frame is dropped */
-//    ETH_InitStructure->ETH_DropTCPIPChecksumErrorFrame = ETH_DropTCPIPChecksumErrorFrame_Enable;
-//    ETH_InitStructure->ETH_ReceiveStoreForward = ETH_ReceiveStoreForward_Enable;
-//    ETH_InitStructure->ETH_TransmitStoreForward = ETH_TransmitStoreForward_Enable;
-//    ETH_InitStructure->ETH_ForwardErrorFrames = ETH_ForwardErrorFrames_Enable;
-//    ETH_InitStructure->ETH_ForwardUndersizedGoodFrames = ETH_ForwardUndersizedGoodFrames_Enable;
-//    ETH_InitStructure->ETH_SecondFrameOperate = ETH_SecondFrameOperate_Disable;
-//    ETH_InitStructure->ETH_AddressAlignedBeats = ETH_AddressAlignedBeats_Enable;
-//    ETH_InitStructure->ETH_FixedBurst = ETH_FixedBurst_Enable;
-//    ETH_InitStructure->ETH_RxDMABurstLength = ETH_RxDMABurstLength_32Beat;
-//    ETH_InitStructure->ETH_TxDMABurstLength = ETH_TxDMABurstLength_32Beat;
-//    ETH_InitStructure->ETH_DMAArbitration = ETH_DMAArbitration_RoundRobin_RxTx_2_1;
-//
-//    /* Configure Ethernet */
-//    uint32_t tmpreg = 0;
-//    static uint16_t RegValue = 0;
-//
-//    /*---------------------- 鐗╃悊灞傞厤缃� -------------------*/
-//    /* 缃甋MI鎺ュ彛鏃堕挓 锛岀疆涓轰富棰戠殑42鍒嗛  */
-//    tmpreg = ETH->MACMIIAR;
-//    tmpreg &= MACMIIAR_CR_MASK;
-//    tmpreg |= (uint32_t)ETH_MACMIIAR_CR_Div42;
-//    ETH->MACMIIAR = (uint32_t)tmpreg;
+    // Ethernet_Configuration
+    ETH_InitTypeDef ETH_InitStructure;
+    uint32_t timeout;
+
+    memset(&ETH_InitStructure, 0, sizeof(ETH_InitTypeDef));
+    // Enable Ethernet MAC clock
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC|RCC_AHBPeriph_ETH_MAC_Tx|RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
+
+#ifdef USE10BASE_T
+    // Enable internal 10BASE-T PHY
+    EXTEN->EXTEN_CTR |=EXTEN_ETH_10M_EN;// enable 10M ethernet phy
+#endif
+
+#ifdef USE_GIGA_MAC
+    // Enable 1G MAC*/
+    EXTEN->EXTEN_CTR |= EXTEN_ETH_RGMII_SEL;// enable 1G ethernet phy
+    RCC_ETH1GCLKConfig(RCC_ETH1GCLKSource_PB1_IN);// use external 125Mhz input
+    RCC_ETH1G_125Mcmd(ENABLE);// enable 125M clock
+
+    //  Enable RGMII GPIO
+    GETH_pin_init();
+#endif
+
+#ifdef USE_FAST_MAC
+    //  Enable MII or RMII GPIO
+    FETH_pin_init();
+#endif
+
+    // Reset ETHERNET on AHB Bus
+    ETH_DeInit();
+
+    /* Software reset */
+    ETH_SoftwareReset();
+
+    /* Wait for software reset */
+    timeout=10;
+
+    if(ETH->DMABMR & ETH_DMABMR_SR)
+    {
+        timeout--;
+        if(timeout==0)
+        {
+            printf("Error:Eth soft-reset timeout!\nPlease check RGMII TX & RX clock line.\n");
+        }
+        vTaskDelay(10);
+    }
+
+    // ETHERNET Configuration ------------------------------------------------------
+    // Call ETH_StructInit if you don't like to configure all ETH_InitStructure parameter
+    ETH_StructInit(&ETH_InitStructure);
+    // Fill ETH_InitStructure parametrs
+    //------------------------   MAC   -----------------------------------
+    ETH_InitStructure.ETH_Mode = ETH_Mode_FullDuplex;
+    ETH_InitStructure.ETH_Speed = ETH_Speed_1000M;
+    ETH_InitStructure.ETH_AutoNegotiation = ETH_AutoNegotiation_Enable  ;
+    ETH_InitStructure.ETH_LoopbackMode = ETH_LoopbackMode_Disable;
+    ETH_InitStructure.ETH_RetryTransmission = ETH_RetryTransmission_Disable;
+    ETH_InitStructure.ETH_AutomaticPadCRCStrip = ETH_AutomaticPadCRCStrip_Disable;
+    ETH_InitStructure.ETH_ReceiveAll = ETH_ReceiveAll_Enable;
+    ETH_InitStructure.ETH_BroadcastFramesReception = ETH_BroadcastFramesReception_Enable;
+    ETH_InitStructure.ETH_PromiscuousMode = ETH_PromiscuousMode_Enable;
+    ETH_InitStructure.ETH_MulticastFramesFilter = ETH_MulticastFramesFilter_Perfect;
+    ETH_InitStructure.ETH_UnicastFramesFilter = ETH_UnicastFramesFilter_Perfect;
+#ifdef CHECKSUM_BY_HARDWARE
+    ETH_InitStructure.ETH_ChecksumOffload = ETH_ChecksumOffload_Enable;
+#endif
+    //------------------------   DMA   -----------------------------------
+    // When we use the Checksum offload feature, we need to enable the Store and Forward mode:
+    //the store and forward guarantee that a whole frame is stored in the FIFO, so the MAC can insert/verify the checksum,
+    //if the checksum is OK the DMA can handle the frame otherwise the frame is dropped
+    ETH_InitStructure.ETH_DropTCPIPChecksumErrorFrame = ETH_DropTCPIPChecksumErrorFrame_Enable;
+    ETH_InitStructure.ETH_ReceiveStoreForward = ETH_ReceiveStoreForward_Enable;
+    ETH_InitStructure.ETH_TransmitStoreForward = ETH_TransmitStoreForward_Enable;
+    ETH_InitStructure.ETH_ForwardErrorFrames = ETH_ForwardErrorFrames_Enable;
+    ETH_InitStructure.ETH_ForwardUndersizedGoodFrames = ETH_ForwardUndersizedGoodFrames_Enable;
+    ETH_InitStructure.ETH_SecondFrameOperate = ETH_SecondFrameOperate_Disable;
+    ETH_InitStructure.ETH_AddressAlignedBeats = ETH_AddressAlignedBeats_Enable;
+    ETH_InitStructure.ETH_FixedBurst = ETH_FixedBurst_Enable;
+    ETH_InitStructure.ETH_RxDMABurstLength = ETH_RxDMABurstLength_32Beat;
+    ETH_InitStructure.ETH_TxDMABurstLength = ETH_TxDMABurstLength_32Beat;
+    ETH_InitStructure.ETH_DMAArbitration = ETH_DMAArbitration_RoundRobin_RxTx_2_1;
+
+    // Configure Ethernet
+    uint32_t tmpreg = 0;
+    static uint16_t RegValue = 0;
+
+    //---------------------- phy config -------------------
+    // set SMI interface clk, main clk div by 42
+    tmpreg = ETH->MACMIIAR;
+    tmpreg &= MACMIIAR_CR_MASK;
+    tmpreg |= (uint32_t)ETH_MACMIIAR_CR_Div42;
+    ETH->MACMIIAR = (uint32_t)tmpreg;
 //
 //    /* 澶嶄綅鐗╃悊灞� */
 //    ETH_WritePHYRegister(PHY_ADDRESS, PHY_BCR, PHY_Reset);/* 澶嶄綅鐗╃悊灞�  */
