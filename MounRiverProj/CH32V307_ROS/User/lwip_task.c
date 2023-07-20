@@ -68,10 +68,10 @@ GPIO_Init(a, &GPIO_InitStructure)
 void Ethernet_LED_LINKSET(uint8_t setbit)
 {
      if(setbit){
-         GPIO_SetBits(GPIOB, GPIO_Pin_8);
+         GPIO_SetBits(GPIOC, GPIO_Pin_0);
      }
      else {
-         GPIO_ResetBits(GPIOB, GPIO_Pin_8);
+         GPIO_ResetBits(GPIOC, GPIO_Pin_0);
     }
 }
 
@@ -86,10 +86,10 @@ void Ethernet_LED_LINKSET(uint8_t setbit)
 void Ethernet_LED_DATASET(uint8_t setbit)
 {
      if(setbit){
-         GPIO_SetBits(GPIOB, GPIO_Pin_9);
+         GPIO_SetBits(GPIOC, GPIO_Pin_1);
      }
      else {
-         GPIO_ResetBits(GPIOB, GPIO_Pin_9);
+         GPIO_ResetBits(GPIOC, GPIO_Pin_1);
     }
 }
 
@@ -107,7 +107,7 @@ void ch307_init_phy()
     GPIO_InitTypeDef GPIO={0};
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
 
-    GPIO.GPIO_Pin = GPIO_Pin_8;
+    GPIO.GPIO_Pin = GPIO_Pin_8; //not sure why A8!!
     GPIO.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO.GPIO_Speed = GPIO_Speed_50MHz;
 
@@ -130,13 +130,13 @@ void ch307_init_phy()
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 
     // Ethernet LED Configuration
-//    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
-//    GPIO.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_9;
-//    GPIO.GPIO_Mode = GPIO_Mode_Out_PP;
-//    GPIO.GPIO_Speed = GPIO_Speed_50MHz;
-//    GPIO_Init(GPIOB,&GPIO);
-//    Ethernet_LED_LINKSET(1);// turn off link led.
-//    Ethernet_LED_DATASET(1);// turn off data led.
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);
+    GPIO.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;
+    GPIO.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOC,&GPIO);
+    Ethernet_LED_LINKSET(1);// turn off link led.
+    Ethernet_LED_DATASET(1);// turn off data led.
 //
 //    // Ethernet_Configuration
 //    // MUST use static in OS_TASK
