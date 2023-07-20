@@ -101,54 +101,53 @@ void Ethernet_LED_DATASET(uint8_t setbit)
  *
  * @return  none
  */
-//OS_SUBNT(CH307_INIT_PHY, void)
-//{
-//    OS_SUBNT_START();
-//    /* SET_MCO */
-//    GPIO_InitTypeDef GPIO={0};
-//    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
-//
-//    GPIO.GPIO_Pin = GPIO_Pin_8;
-//    GPIO.GPIO_Mode = GPIO_Mode_AF_PP;
-//    GPIO.GPIO_Speed = GPIO_Speed_50MHz;
-//
-//    GPIO_Init(GPIOA,&GPIO);
-//
-//    RCC_PLL3Cmd(DISABLE);
-//    RCC_PREDIV2Config(RCC_PREDIV2_Div2);
-//    RCC_PLL3Config(RCC_PLL3Mul_15);
-//    RCC_MCOConfig(RCC_MCO_PLL3CLK);
-//    RCC_PLL3Cmd(ENABLE);
-//
-//    OS_SUBNT_WAITX(OS_SEC_TICKS / 10);
-//
-//    if(RESET == RCC_GetFlagStatus(RCC_FLAG_PLL3RDY))
-//    {
-//        printf("Wait for PLL3 ready.\n");
-//        OS_SUBNT_CWAITX(OS_SEC_TICKS / 2);
-//    }
-//    printf("PLL3 is ready.\n");
-//    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-//
-//    /* Ethernet LED Configuration */
+void ch307_init_phy()
+{
+    // SET_MCO
+    GPIO_InitTypeDef GPIO={0};
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
+
+    GPIO.GPIO_Pin = GPIO_Pin_8;
+    GPIO.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO.GPIO_Speed = GPIO_Speed_50MHz;
+
+    GPIO_Init(GPIOA,&GPIO);
+
+    RCC_PLL3Cmd(DISABLE);
+    RCC_PREDIV2Config(RCC_PREDIV2_Div2);
+    RCC_PLL3Config(RCC_PLL3Mul_15);
+    RCC_MCOConfig(RCC_MCO_PLL3CLK);
+    RCC_PLL3Cmd(ENABLE);
+
+    vTaskDelay(100);
+
+    if(RESET == RCC_GetFlagStatus(RCC_FLAG_PLL3RDY))
+    {
+        printf("Wait for PLL3 ready.\n");
+        vTaskDelay(500);
+    }
+    printf("PLL3 is ready.\n");
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+
+    // Ethernet LED Configuration
 //    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
 //    GPIO.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_9;
 //    GPIO.GPIO_Mode = GPIO_Mode_Out_PP;
 //    GPIO.GPIO_Speed = GPIO_Speed_50MHz;
 //    GPIO_Init(GPIOB,&GPIO);
-//    Ethernet_LED_LINKSET(1);/* turn off link led. */
-//    Ethernet_LED_DATASET(1);/* turn off data led. */
+//    Ethernet_LED_LINKSET(1);// turn off link led.
+//    Ethernet_LED_DATASET(1);// turn off data led.
 //
-//    /* Ethernet_Configuration */
-//    /* MUST use static in OS_TASK */
+//    // Ethernet_Configuration
+//    // MUST use static in OS_TASK
 //    static ETH_InitTypeDef *ETH_InitStructure;
 //    static uint32_t timeout;
 //
 //    ETH_InitStructure = mem_malloc(sizeof(ETH_InitTypeDef));
 //    memset(ETH_InitStructure, 0, sizeof(ETH_InitTypeDef));
-//    /* Enable Ethernet MAC clock */
+//    // Enable Ethernet MAC clock
 //    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC|RCC_AHBPeriph_ETH_MAC_Tx|RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
-//
+
 //#ifdef USE10BASE_T
 //    /* Enable internal 10BASE-T PHY*/
 //    EXTEN->EXTEN_CTR |=EXTEN_ETH_10M_EN;/* 浣胯兘10M浠ュお缃戠墿鐞嗗眰   */
@@ -406,7 +405,7 @@ void Ethernet_LED_DATASET(uint8_t setbit)
 //    ETH_Start();
 //
 //    OS_SUBNT_END();
-//}
+}
 
 
 struct netif WCH_NetIf;

@@ -25,6 +25,7 @@
 #define _LWIP_TASK_H_
 
 #include "FreeRTOS.h"
+#include "task.h"
 #include "debug.h"
 #include "ch32v30x_eth.h"
 //#include "main.h"
@@ -82,6 +83,7 @@ extern volatile uint8_t net_data_led_require; /*闇�瑕佷寒鐏渶姹�*/
 #define NET_LED_PERIOD_MSECS 100
 extern void net_led_tmr(void);
 
+void ch307_init_phy();
 //!!extern OS_TASK(os_lwip, void);
 
 //!!extern OS_TASK(os_lwip_timeouts, void);
