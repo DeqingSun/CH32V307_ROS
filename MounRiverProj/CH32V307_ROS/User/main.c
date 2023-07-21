@@ -65,7 +65,7 @@ void task1_task(void *pvParameters)
 {
     while(1)
     {
-        printf("task1 entry\r\n");
+        //printf("task1 entry\r\n");
         GPIO_SetBits(GPIOA, GPIO_Pin_0);
         vTaskDelay(250);
         GPIO_ResetBits(GPIOA, GPIO_Pin_0);
@@ -86,7 +86,7 @@ void task2_task(void *pvParameters)
 {
     while(1)
     {
-        printf("task2 entry\r\n");
+        //printf("task2 entry\r\n");
         GPIO_ResetBits(GPIOA, GPIO_Pin_15);
         vTaskDelay(500);
         GPIO_SetBits(GPIOA, GPIO_Pin_15);

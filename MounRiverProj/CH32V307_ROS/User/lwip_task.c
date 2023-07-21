@@ -175,7 +175,7 @@ void ch307_init_phy()
     /* Wait for software reset */
     timeout=10;
 
-    if(ETH->DMABMR & ETH_DMABMR_SR)
+    while(ETH->DMABMR & ETH_DMABMR_SR)
     {
         timeout--;
         if(timeout==0)
@@ -239,8 +239,7 @@ void ch307_init_phy()
     timeout=10000;//max timeout 10S
     RegValue = 0;
 
-    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BCR);
-    if((RegValue & (PHY_Reset)))
+    while((ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BCR) & (PHY_Reset)))
     {
         timeout--;
         if(timeout<=0)
@@ -255,8 +254,7 @@ void ch307_init_phy()
     timeout=10000;//max timeout 10S
     RegValue = 0;
 
-    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BSR);
-    if((RegValue & (PHY_Linked_Status)) == 0)
+    while((ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BSR) & (PHY_Linked_Status)) == 0)
     {
         timeout--;
         if(timeout<=0)
@@ -271,8 +269,7 @@ void ch307_init_phy()
     timeout=10000;//max timeout 10S
     RegValue = 0;
 
-    RegValue = ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BSR);
-    if( (RegValue & PHY_AutoNego_Complete) == 0 )
+    while( (ETH_ReadPHYRegister(PHY_ADDRESS, PHY_BSR) & PHY_AutoNego_Complete) == 0 )
     {
         timeout--;
         if(timeout<=0)
