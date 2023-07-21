@@ -280,7 +280,7 @@ void ch307_init_phy()
         vTaskDelay(1);
     }
 
-    RegValue = ETH_ReadPHYRegister( PHY_ADDRESS, 0x10 );
+    RegValue = ETH_ReadPHYRegister( PHY_ADDRESS, PHY_STATUS );
     printf("PHY_SR value:%04x.\n", RegValue);
 
     if( RegValue & (1<<2) )
