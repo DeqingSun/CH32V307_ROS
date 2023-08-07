@@ -87,6 +87,7 @@ extern volatile uint8_t net_data_led_require; /*闇�瑕佷寒鐏渶姹�*/
 extern void net_led_tmr(void);
 
 void ch307_init_phy();
+void init_lwip_tasks();
 //!!extern OS_TASK(os_lwip, void);
 
 //!!extern OS_TASK(os_lwip_timeouts, void);

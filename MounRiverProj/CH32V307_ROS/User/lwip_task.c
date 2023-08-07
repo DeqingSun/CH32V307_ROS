@@ -327,7 +327,7 @@ void ch307_init_phy()
     // write MAC control reg
     ETH->MACCR = (uint32_t)tmpreg;
   #ifdef USE10BASE_T
-    ETH->MACCR|=ETH_Internal_Pull_Up_Res_Enable;/* 鍚敤鍐呴儴涓婃媺  */
+    ETH->MACCR|=ETH_Internal_Pull_Up_Res_Enable;// enable internal pull up
   #endif
     ETH->MACFFR = (uint32_t)(ETH_InitStructure.ETH_ReceiveAll |
                             ETH_InitStructure.ETH_SourceAddrFilter |
@@ -417,6 +417,40 @@ static void wait_dhcp(void *arg)
     {
         lwip_init_success_callback(&(WCH_NetIf.ip_addr)); /* ip鍒嗛厤鎴愬姛鍥炶皟锛岀敤鎴峰湪姝ゅ鍔犲叧浜庣綉缁滆繘绋嬬殑鍒濆鍖栧嚱鏁� */
     }
+}
+
+void init_lwip_tasks(){
+    // mem_init of lwip, init outside the lwip_init for user to using outside. */
+    mem_init();
+
+    //init phy
+    ch307_init_phy();
+    printf("CH307_INIT_PHY ok\n");
+
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_RNG, ENABLE);
+    RNG_Cmd(ENABLE);
+    printf("enable rng ok\n");
+#if LWIP_DHCP
+    ip_addr_set_zero_ip4(&(WCH_NetIf.ip_addr));
+    ip_addr_set_zero_ip4(&ipaddr);
+    ip_addr_set_zero_ip4(&netmask);
+    ip_addr_set_zero_ip4(&gw);
+#else
+    /* IP addresses initialization */
+    IP4_ADDR(&ipaddr,192,168,1,222);
+    IP4_ADDR(&netmask,255,255,255,0);
+    IP4_ADDR(&gw,192,168,1,1);
+#endif
+    /* Initilialize the LwIP stack without RTOS */
+    //lwip_init();
+//
+//    /* add the network interface (IPv4/IPv6) without RTOS */
+//    netif_add(&WCH_NetIf, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
+//
+//    /* Registers the default network interface */
+//    netif_set_default(&WCH_NetIf);
+
+
 }
 
 //OS_TASK(os_lwip, void)
@@ -533,6 +567,7 @@ void ETH_IRQHandler(void)
         p = ETH_RxPkt_ChainMode();
         if(p != NULL)
         {
+            printf("list add");
             //!!list_add(ch307_mac_rec, p); /* add to rec list. */
         }
     }
