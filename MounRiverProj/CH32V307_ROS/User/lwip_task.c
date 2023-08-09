@@ -436,104 +436,79 @@ void init_lwip_tasks(){
     ip_addr_set_zero_ip4(&netmask);
     ip_addr_set_zero_ip4(&gw);
 #else
-    /* IP addresses initialization */
+    // IP addresses initialization
     IP4_ADDR(&ipaddr,192,168,1,222);
     IP4_ADDR(&netmask,255,255,255,0);
     IP4_ADDR(&gw,192,168,1,1);
 #endif
-    /* Initilialize the LwIP stack without RTOS */
-    //lwip_init();
-//
-//    /* add the network interface (IPv4/IPv6) without RTOS */
-//    netif_add(&WCH_NetIf, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
-//
-//    /* Registers the default network interface */
-//    netif_set_default(&WCH_NetIf);
+    // Initilialize the LwIP stack without RTOS
+    lwip_init();
+
+    // add the network interface (IPv4/IPv6) without RTOS
+    netif_add(&WCH_NetIf, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
+
+    // Registers the default network interface
+    netif_set_default(&WCH_NetIf);
+
+    if (netif_is_link_up(&WCH_NetIf))
+        {
+            /* When the netif is fully configured this function must be called */
+            netif_set_up(&WCH_NetIf);
+    #if LWIP_DHCP
+            int err;
+            /*  Creates a new DHCP client for this interface on the first call.
+            Note: you must call dhcp_fine_tmr() and dhcp_coarse_tmr() at
+            the predefined regular intervals after starting the client.
+            You can peek in the netif->dhcp struct for the actual DHCP status.*/
+
+            printf("本例程将使用DHCP动态分配IP地址,如果不需要则在lwipopts.h中将LWIP_DHCP定义为0\n\n");
+
+            err = dhcp_start(&WCH_NetIf);      //开启dhcp
+            if(err == ERR_OK)
+            {
+                printf("lwip dhcp start success...\n\n");
+            }
+            else
+            {
+                printf("lwip dhcp start fail...\n\n");
+            }
+            sys_timeout(50, wait_dhcp, NULL);
+
+    #else
+            lwip_init_success_callback(&(WCH_NetIf.ip_addr)); /*ip分配成功回调，用户在此增加关于网络进程的初始化函数*/
+
+    #endif
+            //!!!!!!OS_TASK_RESTART_ANOTHER(os_lwip_timeouts, 5);  /* 开始超时任务处理 */
+
+//            {
+//                //OS_TASK_SET_STATE();
+//                if(list_head(ch307_mac_rec) != NULL)
+//                {
+//                    /* received a packet */
+//                    ethernetif_input(&WCH_NetIf);
+//                }
+//                ///OS_TASK_CWAITX(0);      /* 不断轮询有没有数据包需要处理 */
+//            }
+        }
+        else
+        {
+            /* When the netif link is down this function must be called */
+            netif_set_down(&WCH_NetIf);
+        }
 
 
 }
 
-//OS_TASK(os_lwip, void)
-//{
-//    OS_TASK_START(os_lwip);
-//
-//    /* mem_init of lwip, init outside the lwip_init for user to using outside. */
-//    mem_init();
-//
-//    /* call sub task ch307 init phy */
-//    OS_CALL_SUBNT(CH307_INIT_PHY);
-//    printf("CH307_INIT_PHY ok\n");
-//
-//    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_RNG, ENABLE);
-//    RNG_Cmd(ENABLE);
-//    printf("enable rng ok\n");
-//#if LWIP_DHCP
-//    ip_addr_set_zero_ip4(&(WCH_NetIf.ip_addr));
-//    ip_addr_set_zero_ip4(&ipaddr);
-//    ip_addr_set_zero_ip4(&netmask);
-//    ip_addr_set_zero_ip4(&gw);
-//#else
-//    /* IP addresses initialization */
-//    IP4_ADDR(&ipaddr,192,168,123,105);
-//    IP4_ADDR(&netmask,255,255,255,0);
-//    IP4_ADDR(&gw,192,168,123,1);
-//#endif
-//    /* Initilialize the LwIP stack without RTOS */
-//    lwip_init();
-//
-//    /* add the network interface (IPv4/IPv6) without RTOS */
-//    netif_add(&WCH_NetIf, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &ethernet_input);
-//
-//    /* Registers the default network interface */
-//    netif_set_default(&WCH_NetIf);
-//
-//    if (netif_is_link_up(&WCH_NetIf))
-//    {
-//        /* When the netif is fully configured this function must be called */
-//        netif_set_up(&WCH_NetIf);
-//#if LWIP_DHCP
-//        int err;
-//        /*  Creates a new DHCP client for this interface on the first call.
-//        Note: you must call dhcp_fine_tmr() and dhcp_coarse_tmr() at
-//        the predefined regular intervals after starting the client.
-//        You can peek in the netif->dhcp struct for the actual DHCP status.*/
-//
-//        printf("鏈緥绋嬪皢浣跨敤DHCP鍔ㄦ�佸垎閰岻P鍦板潃,濡傛灉涓嶉渶瑕佸垯鍦╨wipopts.h涓皢LWIP_DHCP瀹氫箟涓�0\n\n");
-//
-//        err = dhcp_start(&WCH_NetIf);      //寮�鍚痙hcp
-//        if(err == ERR_OK)
-//        {
-//            printf("lwip dhcp start success...\n\n");
-//        }
-//        else
-//        {
-//            printf("lwip dhcp start fail...\n\n");
-//        }
-//        sys_timeout(50, wait_dhcp, NULL);
-//
-//#else
-//        lwip_init_success_callback(&(WCH_NetIf.ip_addr)); /*ip鍒嗛厤鎴愬姛鍥炶皟锛岀敤鎴峰湪姝ゅ鍔犲叧浜庣綉缁滆繘绋嬬殑鍒濆鍖栧嚱鏁�*/
-//
-//#endif
-//        OS_TASK_RESTART_ANOTHER(os_lwip_timeouts, 5);  /* 寮�濮嬭秴鏃朵换鍔″鐞� */
-//
-//        {
-//            OS_TASK_SET_STATE();
-//            if(list_head(ch307_mac_rec) != NULL)
-//            {
-//                /* received a packet */
-//                ethernetif_input(&WCH_NetIf);
-//            }
-//            OS_TASK_CWAITX(0);      /* 涓嶆柇杞鏈夋病鏈夋暟鎹寘闇�瑕佸鐞� */
-//        }
-//    }
-//    else
-//    {
-//        /* When the netif link is down this function must be called */
-//        netif_set_down(&WCH_NetIf);
-//    }
-//    OS_TASK_END(os_lwip);
-//}
+void lwip_init_success_callback(ip_addr_t *ip)
+{
+    printf("local ip adderess is :%ld.%ld.%ld.%ld\n\n",  \
+        ((ip->addr)&0x000000ff),       \
+        (((ip->addr)&0x0000ff00)>>8),  \
+        (((ip->addr)&0x00ff0000)>>16), \
+        ((ip->addr)&0xff000000)>>24);
+    //TCP_Echo_Init();
+    //lwiperf_start_tcp_server(ip, 9527, NULL, NULL);
+}
 
 //OS_TASK(os_lwip_timeouts, void)
 //{
